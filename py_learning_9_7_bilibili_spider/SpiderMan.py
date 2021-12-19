@@ -41,7 +41,7 @@ def parser_url(text):
 
 def stored_data(video_datas):
     try:
-        db = pymysql.connect(host="10.135.10.202", user="Mloser", port=613, password="20200613", database="spider", charset='utf8mb4')
+        db = pymysql.connect(host=input("host:"), user=input("user:"), port=613, password=input("password:"), database=input("database:"), charset='utf8mb4')
     except Exception:
         print("Mysql connect failed")
         return
