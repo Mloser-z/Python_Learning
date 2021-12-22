@@ -23,18 +23,19 @@ def parser_url(text):
     video_names = []
     video_datas = []
     video_collections = []
-    video_points = []
+    # video_points = []
 
     for title in soup.find_all(class_='title'):
         video_names.append(title.string)
     for detail in soup.find_all(class_='detail'):
         for video_data in detail.find_all(class_='data-box'):
             video_datas.append(video_data.text.strip())
-    for video_point in soup.find_all(class_='pts'):
-        video_points.append(video_point.div.string)
+    # for video_point in soup.find_all(class_='pts'):
+    #    video_points.append(video_point.div.string)
     for i in range(0, len(video_datas), 3):
-        video_collections.append([video_names[int(i / 3)], video_datas[i], video_datas[i + 1], video_datas[i + 2],
-                                  video_points[int(i / 3)]])
+        # video_collections.append([video_names[int(i / 3)], video_datas[i], video_datas[i + 1], video_datas[i + 2],
+        #                          video_points[int(i / 3)]])
+        video_collections.append([video_names[int(i / 3)], video_datas[i], video_datas[i + 1], video_datas[i + 2]])
 
     return video_collections
 
@@ -51,26 +52,25 @@ def stored_data(video_datas):
             VIDEO_NAME      CHAR(100)    NOT NULL,
             PLAY_NUMBER     CHAR(20)    NOT NULL,
             VIEW_NUMBER     CHAR(10)    NOT NULL,
-            UP_NAME         CHAR(20)    NOT NULL,
-            VIDEO_POINT     CHAR(10)    NOT NULL
+            UP_NAME         CHAR(20)    NOT NULL
             )"""
     sql_change_charset = """ALTER TABLE BILIBILI_RANK CONVERT TO CHARACTER SET utf8mb4"""
     cursor.execute(sql_create_table)
     cursor.execute(sql_change_charset)
     db.commit()
     for video_data in video_datas:
-        print(video_data[0], video_data[1], video_data[2], video_data[3], video_data[4])
+        print(video_data[0], video_data[1], video_data[2], video_data[3])
         try:
-            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, PLAY_NUMBER, VIEW_NUMBER, UP_NAME, VIDEO_POINT) VALUES\
-                          (%s, %s, %s, %s, %s)'
-            var = (video_data[0], video_data[1], video_data[2], video_data[3], video_data[4])
+            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, PLAY_NUMBER, VIEW_NUMBER, UP_NAME) VALUES\
+                          (%s, %s, %s, %s)'
+            var = (video_data[0], video_data[1], video_data[2], video_data[3])
             cursor.execute(sql_insert_data, var)
             db.commit()
 
         except Exception as e:
-            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, PLAY_NUMBER, VIEW_NUMBER, UP_NAME, VIDEO_POINT) VALUES\
-                                      (%s, %s, %s, %s, %s)'
-            var = ("DataError", video_data[1], video_data[2], video_data[3], video_data[4])
+            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, PLAY_NUMBER, VIEW_NUMBER, UP_NAME) VALUES\
+                                      (%s, %s, %s, %s)'
+            var = ("DataError", video_data[1], video_data[2], video_data[3])
             cursor.execute(sql_insert_data, var)
             db.commit()
 
