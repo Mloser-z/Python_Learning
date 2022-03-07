@@ -50,9 +50,9 @@ def stored_data(video_datas):
     cursor.execute("DROP TABLE IF EXISTS BILIBILI_RANK")
     sql_create_table = """CREATE TABLE BILIBILI_RANK (
             VIDEO_NAME      CHAR(100)    NOT NULL,
-            PLAY_NUMBER     CHAR(20)    NOT NULL,
+            UP_NAME         CHAR(20)    NOT NULL,
             VIEW_NUMBER     CHAR(10)    NOT NULL,
-            UP_NAME         CHAR(20)    NOT NULL
+            PLAY_NUMBER     CHAR(20)    NOT NULL
             )"""
     sql_change_charset = """ALTER TABLE BILIBILI_RANK CONVERT TO CHARACTER SET utf8mb4"""
     cursor.execute(sql_create_table)
@@ -61,14 +61,14 @@ def stored_data(video_datas):
     for video_data in video_datas:
         print(video_data[0], video_data[1], video_data[2], video_data[3])
         try:
-            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, PLAY_NUMBER, VIEW_NUMBER, UP_NAME) VALUES\
+            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, UP_NAME, VIEW_NUMBER, PLAY_NUMBER) VALUES\
                           (%s, %s, %s, %s)'
             var = (video_data[0], video_data[1], video_data[2], video_data[3])
             cursor.execute(sql_insert_data, var)
             db.commit()
 
         except Exception as e:
-            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, PLAY_NUMBER, VIEW_NUMBER, UP_NAME) VALUES\
+            sql_insert_data = 'INSERT INTO BILIBILI_RANK(VIDEO_NAME, UP_NAME, VIEW_NUMBER, PLAY_NUMBER) VALUES\
                                       (%s, %s, %s, %s)'
             var = ("DataError", video_data[1], video_data[2], video_data[3])
             cursor.execute(sql_insert_data, var)
